@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
 
+require 'password_generator'
+
 input_valid = false
 
 until input_valid
