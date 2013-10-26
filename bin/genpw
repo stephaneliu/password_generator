@@ -1,0 +1,31 @@
+#!/usr/bin/env ruby
+
+require 'etc'
+require 'password'
+
+# To use without rubygem: ruby -Ilib ./bin/genpw
+
+input_valid = false
+
+until input_valid
+  puts "How many passwords to generate? [100] "
+
+  answer      = gets.chomp
+  count       = answer.to_i
+  input_valid = true if count > 0
+end
+
+passwords       = PasswordGenerator.new(count).generate
+user            = Etc.getlogin
+output_file     = Dir.home(user) + "/password.txt"
+
+system "echo ' ' > #{output_file} \n\n"
+system "echo 'Generated passwords meet the following requirements: ' >> #{output_file}"
+system "echo 'Must have at least one special character (!@#\$\%^&*())' >> #{output_file}"
+system "echo 'Must have at least one numeric character (0 -9)' >> #{output_file}"
+system "echo 'Must have at least one lower case alphabetic character (a - z)' >> #{output_file}"
+system "echo 'Must have at least one upper case alphabetic character (A - Z)' >> #{output_file}"
+system "echo 'Must have at least 14 and less than 33 characters in length' >> #{output_file}"
+system "echo ' ' >> #{output_file}"
+system "echo '" + passwords.map(&:to_s).join("\n\n") + "' >> #{output_file}"
+puts "Ok, generated #{count} random passwords into #{output_file}"
