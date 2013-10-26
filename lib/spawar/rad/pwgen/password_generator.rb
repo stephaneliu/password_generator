@@ -1,7 +1,6 @@
-
-module spawar
-  module rad
-    module pwgen
+module Spawar
+  module Rad
+    module Pwgen
 
       class PasswordGenerator
         attr_accessor :characters_set, :amount_to_generate
@@ -19,7 +18,7 @@ module spawar
             random = ''
 
             until valid
-              random = Password.new((1..15).map {|a| characters_set[rand(characters_set.size)]}.join)
+              random = Spawar::Rad::Password.new((1..15).map {|a| characters_set[rand(characters_set.size)]}.join)
 
               if random.valid?
                 passwords << random

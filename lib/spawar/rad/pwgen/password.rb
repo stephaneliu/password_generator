@@ -6,9 +6,9 @@
 # Must have at least one upper case alphabetic character (A - Z)'
 # Must have at least 14 and less than 33 characters in length'
 
-module spawar
-  module rad
-    module pwgen
+module Spawar
+  module Rad
+    module Pwgen
 
       class Password
         attr_accessor :password

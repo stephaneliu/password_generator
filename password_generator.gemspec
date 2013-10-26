@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
   s.description = 'Generate list of passwords easily from command line'
   s.authors     = ["Stephane Liu"]
   s.email       = 'sliu@sjliu.com'
-  s.files       = ['lib/password_generator.rb']
+  s.files       = ['lib/password.rb','lib/generator.rb']
   s.homepage    = ''
   s.license     = 'MIT'
 end
