@@ -1,0 +1,107 @@
+#!/usr/bin/env ruby
+
+require 'etc'
+require 'password_generator'
+require 'optparse'
+require 'ostruct'
+
+# To use without rubygem: ruby -Ilib ./bin/genpw
+
+user            = Etc.getlogin
+default_output  = Dir.home(user) + "/password.txt"
+
+options             = OpenStruct.new
+options.output_file = default_output
+options.count       = 100
+options.uppercase   = true
+options.numeric     = true
+options.symbol      = true
+options.min         = 14
+options.max         = 32
+
+opts = OptionParser.new do |opts|
+  opts.banner = "Usage: genpw [options]"
+  opts.separator ""
+  opts.separator "Examples:"
+  opts.separator "  pwgen --o /tmp/password.txt"
+  opts.separator "  pwgen --uppercase false"
+  opts.separator "Options:"
+
+  opts.on("-o", "--output-file [#{default_output}]", "Ouput password file") do |output|
+    options.output_file = output
+  end
+
+  opts.on("-c", "--count [#{options.count}]", "Number of passwords to create") do |count|
+    options.count = count.to_i
+
+    if options.count == 0
+      puts "Count must be greater than 0"
+      exit
+    end
+  end
+
+  opts.on("--min [#{options.min}]", "Minimum length of password") do |min|
+    options.min = min.to_i
+
+    if min_gte_max?(options.min, options.max)
+      puts "Minimum number of characters (#{options.min}) must be less than maximum (#{options.max})"
+      exit
+    end
+  end
+
+  opts.on("--max [#{options.max}]", "Maximum length of password") do |max|
+    options.max = max.to_i
+
+    if min_gte_max?(options.min, options.max)
+      puts "Minimum number of characters (#{options.min}) must be less than maximum (#{options.max})"
+      exit
+    end
+  end
+
+  opts.on("-u", "--uppercase [#{options.uppercase}]", "Include uppercase characters in password") do |upper|
+    options.uppercase = true_values.include? upper
+  end
+
+  opts.on("-n", "--numeric [#{options.numeric}]", "Include numerical characters in password") do |numeric|
+    options.numeric = true_values.include? numeric
+  end
+
+  opts.on("-s", "--symbol [#{options.symbol}]", "Include symbol (!@#$%) characters in password") do |symbol|
+    options.symbol = true_values.include? symbol
+  end
+
+  opts.on_tail("-h", "--help", "Show this message") do
+    puts opts
+    exit
+  end
+
+  opts.on_tail("--version", "Show version") do
+    puts "Not yet implemented"
+    exit
+  end
+end
+
+def min_gte_max?(min, max)
+  min >= max
+end
+
+def true_values
+  ["1", "true", "t", "yes", "y"]
+end
+
+opts.parse!
+
+passwords = PasswordGenerator::Generator.new(options).generate
+file      = options.output_file
+
+system "echo ' ' > #{file} \n\n"
+system "echo 'Generated passwords meet the following requirements: ' >> #{file}"
+system "echo 'Must have at least one lower case alphabetic character (a - z)' >> #{file}"
+system "echo 'Must have at least one special character (!@#\$\%^&*())' >> #{file}" if options.symbol
+system "echo 'Must have at least one numeric character (0 -9)' >> #{file}" if options.numeric
+system "echo 'Must have at least one upper case alphabetic character (A - Z)' >> #{file}" if options.uppercase
+system "echo 'Must have at least #{options.min} characters' >> #{file}"
+system "echo 'Must have no more than #{options.max} characters' >> #{file}"
+system "echo ' ' >> #{file}"
+system "echo '" + passwords.map(&:to_s).join("\n\n") + "' >> #{file}"
+puts "#{options.count} random passwords were generated into #{file}"
