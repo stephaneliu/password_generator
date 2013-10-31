@@ -41,5 +41,6 @@ PLATFORMS
 
 DEPENDENCIES
   guard-minitest
+  minitest
   minitest-matchers
   rake
