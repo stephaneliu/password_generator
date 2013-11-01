@@ -26,11 +26,11 @@ module PasswordGenerator
     end
 
     def has_lowercase?
-      password =~ /[a-z]/
+      /[a-z]/ === password
     end
 
     def has_uppercase?
-      config.uppercase ? /[A-Z]/) : true
+      config.uppercase ? /[A-Z]/ === password : true
     end
 
     def correct_length?
