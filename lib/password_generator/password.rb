@@ -8,7 +8,7 @@ module PasswordGenerator
     end
 
     def valid?
-      has_special? and  has_numeric? and has_lowercase? and has_uppercase? and correct_length?
+      has_special? and has_numeric? and has_lowercase? and has_uppercase? and correct_length?
     end
 
     def to_s
@@ -18,11 +18,11 @@ module PasswordGenerator
     private
    
     def has_special?
-      config.symbol ?  password =~ /\W/ : true
+      config.symbol ? !!(password =~ /\W/) : true
     end
 
     def has_numeric?
-      config.numeric ? password =~ /\d/ : true
+      config.numeric ? !!(password =~ /\d/) : true
     end
 
     def has_lowercase?
@@ -30,7 +30,7 @@ module PasswordGenerator
     end
 
     def has_uppercase?
-      config.uppercase ? password =~ /[A-Z]/ : true
+      config.uppercase ? !!(password =~ /[A-Z]/) : true
     end
 
     def correct_length?
