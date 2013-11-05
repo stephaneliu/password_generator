@@ -1,3 +1,5 @@
+require 'securerandom'
+
 module PasswordGenerator
   class Generator
     attr_accessor :characters_set, :config
@@ -16,7 +18,7 @@ module PasswordGenerator
 
         until valid
           random_size = (config.min..config.max).to_a.shuffle.first
-          random      = (1..random_size).map {|a| characters_set[rand(characters_set.size)]}.join
+          random      = (1..random_size).map {|a| characters_set[SecureRandom.random_number(characters_set.size)]}.join
           password    = Password.new(random, config)
 
           if password.valid?
