@@ -1,9 +1,9 @@
 #!/usr/bin/env ruby
 
 require 'etc'
-require 'password_generator'
 require 'optparse'
 require 'ostruct'
+require_relative '../lib/password_list_generator'
 
 # To use without rubygem: ruby -Ilib ./bin/genpw
 
@@ -91,7 +91,7 @@ end
 
 opts.parse!
 
-passwords = PasswordGenerator::Generator.new(options).generate
+passwords = PasswordListGenerator::Generator.new(options).generate
 file      = options.output_file
 
 system "echo ' ' > #{file} \n\n"

@@ -1,4 +1,4 @@
-module PasswordGenerator
+module PasswordListGenerator
   class Password
     attr_accessor :password, :config
 

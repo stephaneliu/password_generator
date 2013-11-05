@@ -1,6 +1,6 @@
 require 'securerandom'
 
-module PasswordGenerator
+module PasswordListGenerator
   class Generator
     attr_accessor :characters_set, :config
 
