@@ -1,5 +1,3 @@
-require 'securerandom'
-
 module PasswordListGenerator
   class Generator
     attr_accessor :characters_set, :config

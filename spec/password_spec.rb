@@ -19,10 +19,10 @@ describe PasswordListGenerator::Password do
 
   describe '.valid?' do
     it "should evaluate symbols" do
-      text_without = 'hello'
-      text_with    = 'he###llo'
+      text_without   = 'hello'
+      text_with      = 'he###llo'
 
-      @config.symbol      = true
+      @config.symbol = true
       password       = PasswordListGenerator::Password.new(text_with, @config)
       password.valid?.must_equal true
       password       = PasswordListGenerator::Password.new(text_without, @config)
