@@ -8,6 +8,8 @@ Gem::Specification.new do |s|
   s.authors     = ["Stephane Liu"]
   s.email       = 'sliu@sjliu.com'
   s.files       = ['lib/password_list_generator', 'lib/password_list_generator.rb', 'lib/password_list_generator/password.rb','lib/password_list_generator/generator.rb']
+  s.add_development_dependency "simplecov", ">= 0.7"
+  s.add_development_dependency 'coveralls', '>= 0.7.0'
   s.homepage    = 'https://github.com/stephaneliu/password_generator'
   s.license     = 'MIT'
 end

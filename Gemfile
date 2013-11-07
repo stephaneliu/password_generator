@@ -6,5 +6,9 @@ group :test do
   gem 'minitest'
   gem 'guard-minitest'
   gem 'minitest-matchers'
+  gem 'rb-fsevent'
+  gem 'terminal-notifier-guard'
+  gem 'simplecov', require: false
+  gem 'coveralls', require: false
 end
 
