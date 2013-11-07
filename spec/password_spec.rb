@@ -1,7 +1,7 @@
 require_relative 'spec_helper'
 require 'ostruct'
 
-describe PasswordGenerator::Password do
+describe PasswordListGenerator::Password do
 
   before do
     @config     = OpenStruct.new
@@ -12,7 +12,7 @@ describe PasswordGenerator::Password do
   describe '.to_s' do
     it 'should be value initialized' do
       text     = 'hello'
-      password = PasswordGenerator::Password.new(text, @config)
+      password = PasswordListGenerator::Password.new(text, @config)
       password.to_s.must_equal text
     end
   end
@@ -23,15 +23,15 @@ describe PasswordGenerator::Password do
       text_with    = 'he###llo'
 
       @config.symbol      = true
-      password       = PasswordGenerator::Password.new(text_with, @config)
+      password       = PasswordListGenerator::Password.new(text_with, @config)
       password.valid?.must_equal true
-      password       = PasswordGenerator::Password.new(text_without, @config)
+      password       = PasswordListGenerator::Password.new(text_without, @config)
       password.valid?.must_equal false
 
       @config.symbol = false
-      password       = PasswordGenerator::Password.new(text_with, @config)
+      password       = PasswordListGenerator::Password.new(text_with, @config)
       password.valid?.must_equal true
-      password       = PasswordGenerator::Password.new(text_without, @config)
+      password       = PasswordListGenerator::Password.new(text_without, @config)
       password.valid?.must_equal true
     end
 
@@ -40,15 +40,15 @@ describe PasswordGenerator::Password do
       text_without = 'hello'
 
       @config.numeric = true
-      password        = PasswordGenerator::Password.new(text_with, @config)
+      password        = PasswordListGenerator::Password.new(text_with, @config)
       password.valid?.must_equal true
-      password        = PasswordGenerator::Password.new(text_without, @config)
+      password        = PasswordListGenerator::Password.new(text_without, @config)
       password.valid?.must_equal false
 
       @config.numeric = false
-      password        = PasswordGenerator::Password.new(text_with, @config)
+      password        = PasswordListGenerator::Password.new(text_with, @config)
       password.valid?.must_equal true
-      password        = PasswordGenerator::Password.new(text_without, @config)
+      password        = PasswordListGenerator::Password.new(text_without, @config)
       password.valid?.must_equal true
     end
 
@@ -56,9 +56,9 @@ describe PasswordGenerator::Password do
       text_with    = 'hello'
       text_without = 'HELLO'
 
-      password          = PasswordGenerator::Password.new(text_with, @config)
+      password          = PasswordListGenerator::Password.new(text_with, @config)
       password.valid?.must_equal true
-      password          = PasswordGenerator::Password.new(text_without, @config)
+      password          = PasswordListGenerator::Password.new(text_without, @config)
       password.valid?.must_equal false
     end
 
@@ -67,15 +67,15 @@ describe PasswordGenerator::Password do
       text_without = 'hello'
 
       @config.uppercase = true
-      password          = PasswordGenerator::Password.new(text_with, @config)
+      password          = PasswordListGenerator::Password.new(text_with, @config)
       password.valid?.must_equal true
-      password          = PasswordGenerator::Password.new(text_without, @config)
+      password          = PasswordListGenerator::Password.new(text_without, @config)
       password.valid?.must_equal false
 
       @config.uppercase = false
-      password          = PasswordGenerator::Password.new(text_with, @config)
+      password          = PasswordListGenerator::Password.new(text_with, @config)
       password.valid?.must_equal true
-      password          = PasswordGenerator::Password.new(text_without, @config)
+      password          = PasswordListGenerator::Password.new(text_without, @config)
       password.valid?.must_equal true
     end
 
@@ -85,13 +85,13 @@ describe PasswordGenerator::Password do
       equals_min  = "hello"
       exceeds_min = 'hellooo'
 
-      password = PasswordGenerator::Password.new(below_min, @config)
+      password = PasswordListGenerator::Password.new(below_min, @config)
       password.valid?.must_equal false
 
-      password = PasswordGenerator::Password.new(equals_min, @config)
+      password = PasswordListGenerator::Password.new(equals_min, @config)
       password.valid?.must_equal true
 
-      password = PasswordGenerator::Password.new(exceeds_min, @config)
+      password = PasswordListGenerator::Password.new(exceeds_min, @config)
       password.valid?.must_equal true
     end
 
@@ -101,13 +101,13 @@ describe PasswordGenerator::Password do
       equals_max  = "hello"
       exceeds_max = 'hellooo'
 
-      password = PasswordGenerator::Password.new(below_max , @config)
+      password = PasswordListGenerator::Password.new(below_max , @config)
       password.valid?.must_equal true
 
-      password = PasswordGenerator::Password.new(equals_max , @config)
+      password = PasswordListGenerator::Password.new(equals_max , @config)
       password.valid?.must_equal true
 
-      password = PasswordGenerator::Password.new(exceeds_max , @config)
+      password = PasswordListGenerator::Password.new(exceeds_max , @config)
       password.valid?.must_equal false
     end
   end
