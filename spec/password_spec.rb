@@ -10,7 +10,7 @@ describe PasswordListGenerator::Password do
   end
 
   describe '.to_s' do
-    it 'should be value initialized' do
+    it 'should return password value' do
       text     = 'hello'
       password = PasswordListGenerator::Password.new(text, @config)
       password.to_s.must_equal text
