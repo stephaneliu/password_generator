@@ -1,5 +1,9 @@
 require 'simplecov'
-# require 'coveralls'
+require 'coveralls'
+SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
+	SimpleCov::Formatter::HTMLFormatter,
+	Coveralls::SimpleCov::Formatter
+]
 SimpleCov.start
 
 require File.join(File.dirname(__FILE__), "..", "lib", "password_list_generator")
@@ -8,8 +12,4 @@ require 'minitest/spec'
 require 'minitest/pride' # fantabulous
 
 
-# SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
-#     SimpleCov::Formatter::HTMLFormatter,
-#       Coveralls::SimpleCov::Formatter
-# ]
 
