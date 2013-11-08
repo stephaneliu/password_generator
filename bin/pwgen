@@ -76,7 +76,7 @@ opts = OptionParser.new do |opts|
   end
 
   opts.on_tail("--version", "Show version") do
-    puts "Not yet implemented"
+    puts PasswordListGenerator::VERSION
     exit
   end
 end
