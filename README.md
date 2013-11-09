@@ -35,7 +35,7 @@ gem install password_list_generator
 [Code Climate]: https://codeclimate.com/github/stephaneliu/password_generator
 [Coverage Status]: https://coveralls.io/r/stephaneliu/password_generator
 
-[GV img]: https://badge.fury.io/rb/password_generator.png
+[GV img]: https://badge.fury.io/rb/password_list_generator.png
 [BS img]: https://travis-ci.org/stephaneliu/password_generator.png
 [DS img]: https://gemnasium.com/stephaneliu/password_generator.png
 [CC img]: https://codeclimate.com/github/stephaneliu/password_generator.png
