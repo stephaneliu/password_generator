@@ -9,6 +9,16 @@ describe PasswordListGenerator::Password do
     @config.max = 8
   end
 
+	describe '.new' do
+		it 'should initialize password and config variables' do
+			text     = "test"
+			password = PasswordListGenerator::Password.new(text, @config)
+
+			password.password.must_equal text
+			password.config.must_equal @config
+		end
+	end
+
   describe '.to_s' do
     it 'should return password value' do
       text     = 'hello'
