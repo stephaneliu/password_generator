@@ -11,13 +11,11 @@ module PasswordListGenerator
       passwords = []
 
       1.upto(config.count) do
-        valid  = false
-        random = ''
+        valid = false
 
         until valid
           random_size = (config.min..config.max).to_a.shuffle.first
-          random      = (1..random_size).map {|a| characters_set[SecureRandom.random_number(characters_set.size)]}.join
-          password    = Password.new(random, config)
+          password    = Password.new(random_string, config)
 
           if password.valid?
             passwords << password
@@ -30,6 +28,14 @@ module PasswordListGenerator
     end
 
     private
+
+    def random_string
+      (1..random_size).map {characters_set[random_number]}.join
+    end
+
+    def random_number
+      SecureRandom.random_number(characters_set.size)]
+    end
 
     def build_characters_set
       @characters_set = ('a'..'z').to_a
