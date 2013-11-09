@@ -34,7 +34,7 @@ module PasswordListGenerator
     end
 
     def random_number
-      SecureRandom.random_number(characters_set.size)]
+      SecureRandom.random_number(characters_set.size)
     end
 
     def build_characters_set
