@@ -9,16 +9,16 @@ PasswordListGenerator
 
 ## Description
 
-Generate a list of passwords from the command line
+Generate a list of passwords from the command line. The complexity of the password can be passed in through the CLI.
 
 ## Installation
 
-gem install password_list_generator
+gem install password\_list\_generator
 
 ## Usage
 
-> pwgen
-> pwgen -h --> see more options
+	> pwgen --output-file [/home_dir/password.txt] --count [100] --uppercase [true] --numeric [true] --symbol [true]
+	> pwgen -h # see more options
 
 ## Contributing
 
