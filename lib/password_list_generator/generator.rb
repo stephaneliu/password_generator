@@ -9,28 +9,37 @@ module PasswordListGenerator
 
     def generate
       passwords = []
+      tries     = 0
 
-      1.upto(config.count) do
-        valid = false
+			catch :no_valid_passwords do
+				1.upto(config.count) do
+					tries = 0
+					valid = false
 
-        until valid
-          random_size = (config.min..config.max).to_a.shuffle.first
-          password    = Password.new(random_string, config)
+					until valid
+						random_size = (config.min..config.max).to_a.shuffle.first
+						password    = Password.new(random_string(random_size), config)
 
-          if password.valid?
-            passwords << password
-            valid = true 
-          end
-        end
-      end
+						if password.valid?
+							passwords << password
+							valid = true 
+						else
+							tries += 1
+							throw :no_valid_passwords if tries > 10
+						end
+					end
+				end
+			end
+
+			raise "There was a problem creating valid passwords." if tries > 10
 
       passwords
     end
 
     private
 
-    def random_string
-      (1..random_size).map {characters_set[random_number]}.join
+    def random_string(size)
+      (1..size).map {characters_set[random_number]}.join
     end
 
     def random_number
