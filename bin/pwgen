@@ -91,17 +91,23 @@ end
 
 opts.parse!
 
-passwords = PasswordListGenerator::Generator.new(options).generate
-file      = options.output_file
+begin
+	passwords = PasswordListGenerator::Generator.new(options).generate
 
-system "echo ' ' > #{file} \n\n"
-system "echo 'Generated passwords meet the following requirements: ' >> #{file}"
-system "echo 'Must have at least one lower case alphabetic character (a - z)' >> #{file}"
-system "echo 'Must have at least one special character (!@#\$\%^&*())' >> #{file}" if options.symbol
-system "echo 'Must have at least one numeric character (0 -9)' >> #{file}" if options.numeric
-system "echo 'Must have at least one upper case alphabetic character (A - Z)' >> #{file}" if options.uppercase
-system "echo 'Must have at least #{options.min} characters' >> #{file}"
-system "echo 'Must have no more than #{options.max} characters' >> #{file}"
-system "echo ' ' >> #{file}"
-system "echo '" + passwords.map(&:to_s).join("\n\n") + "' >> #{file}"
-puts "#{options.count} random passwords were generated into #{file}"
+	file      = options.output_file
+
+	system "echo ' ' > #{file} \n\n"
+	system "echo 'Generated passwords meet the following requirements: ' >> #{file}"
+	system "echo 'Must have at least one lower case alphabetic character (a - z)' >> #{file}"
+	system "echo 'Must have at least one special character (!@#\$\%^&*())' >> #{file}" if options.symbol
+	system "echo 'Must have at least one numeric character (0 -9)' >> #{file}" if options.numeric
+	system "echo 'Must have at least one upper case alphabetic character (A - Z)' >> #{file}" if options.uppercase
+	system "echo 'Must have at least #{options.min} characters' >> #{file}"
+	system "echo 'Must have no more than #{options.max} characters' >> #{file}"
+	system "echo ' ' >> #{file}"
+	system "echo '" + passwords.map(&:to_s).join("\n\n") + "' >> #{file}"
+	puts "#{options.count} random passwords were generated into #{file}"
+rescue Exception => e
+	puts e
+	puts "Try viewing options with pwgen -h"
+end
