@@ -1,10 +1,14 @@
 module PasswordListGenerator
   class Password
-    attr_accessor :password, :config
+    attr_accessor :password, :symbol, :numeric, :uppercase, :min, :max
 
-    def initialize(password, config)
-      @password = password
-      @config   = config
+    def initialize(config)
+      @password  = ''
+      @symbol    = config.symbol || false
+      @numeric   = config.numeric || false
+      @uppercase = config.uppercase || false
+      @min       = config.min || 5
+      @max       = config.max || 15
     end
 
     def valid?
@@ -18,11 +22,11 @@ module PasswordListGenerator
     private
    
     def has_special?
-      config.symbol ? /\W/ === password : true
+      symbol ? /\W/ === password : true
     end
 
     def has_numeric?
-      config.numeric ? /\d/ === password : true
+      numeric ? /\d/ === password : true
     end
 
     def has_lowercase?
@@ -30,11 +34,11 @@ module PasswordListGenerator
     end
 
     def has_uppercase?
-      config.uppercase ? /[A-Z]/ === password : true
+      uppercase ? /[A-Z]/ === password : true
     end
 
     def correct_length?
-      password.size >= config.min and password.size <= config.max
+      password.size >= min and password.size <= max
     end
   end
 end

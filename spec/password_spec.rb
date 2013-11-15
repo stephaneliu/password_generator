@@ -10,13 +10,20 @@ describe PasswordListGenerator::Password do
   end
 
 	describe '.new' do
-		it 'should initialize password and config variables' do
+		it 'should initialize config variables' do
 			text     = "test"
 			password = PasswordListGenerator::Password.new(text, @config)
 
-			password.password.must_equal text
-			password.config.must_equal @config
+			password.symbol.must_equal false
+			password.numeric.must_equal false
+			password.uppercase.must_equal false
+			password.min.must_equal @config.min
+			password.max.must_equal @config.max
 		end
+	end
+
+	describe '.generate' do
+		it 'should generate a valid password'
 	end
 
   describe '.to_s' do
