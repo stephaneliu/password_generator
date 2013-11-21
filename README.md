@@ -13,18 +13,29 @@ Generate a list of passwords from the command line. The complexity of the passwo
 
 ## Installation
 
-gem install password\_list\_generator
+PasswordListGenerator is cryptographically signed. To be sure the gem you install hasn't been tampered with:
+
+Add my public key (if you haven't already) as a trusted certificate gem
+
+> gem cert --add <(curl -Ls https://raw.github.com/stephaneliu/password_generator/master/certs/stephaneliu.pem)
+ 
+> gem install password_list_generator -P HighSecurity.
+
+Warning: This may cause installation to fail if non-signed depenedent gems are also being installed.
 
 ## Usage
 
-	> pwgen --output-file [/home_dir/password.txt] --count [100] --uppercase [true] --numeric [true] --symbol [true]
-	> pwgen -h # see more options
+Defaults:
+> pwgen
+
+See more options:
+> pwgen -h
 
 ## Contributing
 
 1. Fork it
 2. Create your feature branch (`git checkout -b my-awesomie-feature`)
-3. Commit your changes (`git commit -am 'Add some awesome feature'`)
+3. Commit your changes (`git commit -am 'My some awesome feature'`)
 4. Push to branch (`git push origin my-awesome-feature`)
 5. Create a new Pull Request
 
