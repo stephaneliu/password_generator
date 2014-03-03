@@ -17,7 +17,7 @@ PasswordListGenerator is cryptographically signed. To be sure the gem you instal
 
 Add my public key (if you haven't already) as a trusted certificate gem
 
-	> gem cert --add <(curl -Ls https://raw.github.com/stephaneliu/password_generator/master/certs/stephaneliu-gem.pem)
+	> gem cert --add <(curl -Ls https://raw.github.com/stephaneliu/password_generator/master/certs/stephaneliu_gem.pem)
  	> gem install password_list_generator -P HighSecurity.
 
 Warning: This may cause installation to fail if non-signed depenedent gems are also being installed.

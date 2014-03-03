@@ -15,8 +15,8 @@ Gem::Specification.new do |gem|
   gem.executables   = gem.files.grep(%r{^bin/}).map {|f| File.basename(f)}
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ['lib']
-  gem.cert_chain    = ['certs/stephaneliu-gem.pem']
-  gem.signing_key   = File.expand_path("~/.ssh/stephane-private-gem.pem") if $0 =~ /gem\z/
+  gem.cert_chain    = ['certs/stephaneliu_gem.pem']
+  gem.signing_key   = File.expand_path("~/.ssh/stephaneliu_private_gem.pem") if $0 =~ /gem\z/
 
   gem.add_development_dependency 'simplecov', '>= 0.7'
   gem.add_development_dependency 'coveralls', '>= 0.7.0'
