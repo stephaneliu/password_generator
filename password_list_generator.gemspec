@@ -12,7 +12,6 @@ Gem::Specification.new do |gem|
   gem.homepage      = 'https://github.com/stephaneliu/password_generator'
   # gem s.date      = '2013-10-24'
   gem.files         = `git ls-files`.split($/)
-  puts "exe: #{gem.files.grep(%r{^bin/}).map {|f| File.basename(f)}}"
   gem.executables   = gem.files.grep(%r{^bin/}).map {|f| File.basename(f)}
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ['lib']
