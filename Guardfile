@@ -8,7 +8,7 @@ guard :minitest do
   # watch(%r{^test/test_helper\.rb})      { 'test' }
 
   # with Minitest::Spec
-  watch(%r{^spec/(.*)_spec\.rb})
+  watch(%r{^spec/password_list_generator/(.*)_spec\.rb})
   watch(%r{^lib/password_list_generator/(.+)\.rb}) { |m| "spec/#{m[1]}_spec.rb" }
   watch(%r{^lib/(.+)\.rb})          { |m| "spec/#{m[1]}_spec.rb" }
   watch(%r{^bin/pwgen})             { |m| "spec/lib/pwgen_spec.rb" }
