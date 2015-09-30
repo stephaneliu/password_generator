@@ -3,6 +3,7 @@ source "https://rubygems.org/"
 group :test do
   gem 'rake'
   gem 'minitest'
+  gem 'guard'
   gem 'guard-minitest'
   gem 'minitest-matchers'
   gem 'rb-fsevent'
