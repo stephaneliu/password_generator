@@ -2,124 +2,164 @@ require_relative '../spec_helper'
 require 'ostruct'
 
 describe PasswordListGenerator::Password do
+  subject { PasswordListGenerator::Password.new(text, config) }
 
-  before do
-    @config     = OpenStruct.new
-    @config.min = 2
-    @config.max = 8
-  end
+  let(:config)       { OpenStruct.new(default_args) }
+  let(:default_args) { { min: 2, max: 8 }.merge(args) }
+  let(:args)         { { _does_not_matter: true } }
 
 	describe '.new' do
-		it 'should initialize password and config variables' do
-			text     = "test"
-			password = PasswordListGenerator::Password.new(text, @config)
+    let(:text) { 'test' }
 
-			password.password.must_equal text
-			password.config.must_equal @config
+		it 'should initialize password and config variables' do
+			subject.password.must_equal text
+			subject.config.must_equal config
 		end
 	end
 
   describe '.to_s' do
-    it 'should return password value' do
-      text     = 'hello'
-      password = PasswordListGenerator::Password.new(text, @config)
-      password.to_s.must_equal text
-    end
+    let(:text) { 'hello' }
+    it         { subject.to_s.must_equal text }
   end
 
   describe '.valid?' do
-    it "should evaluate symbols" do
-      text_without   = 'hello'
-      text_with      = 'he###llo'
+    describe 'validating symbols' do
+      let(:text_without_symbol) { 'hello' }
+      let(:text_with_symbol)    { 'he###llo' }
 
-      @config.symbol = true
-      password       = PasswordListGenerator::Password.new(text_with, @config)
-      password.valid?.must_equal true
-      password       = PasswordListGenerator::Password.new(text_without, @config)
-      password.valid?.must_equal false
+      describe 'when symbol configuration is true' do
+        let(:args) { { symbol: true } }
 
-      @config.symbol = false
-      password       = PasswordListGenerator::Password.new(text_with, @config)
-      password.valid?.must_equal true
-      password       = PasswordListGenerator::Password.new(text_without, @config)
-      password.valid?.must_equal true
+        describe 'and text does not have symbol' do
+          let(:text) { text_without_symbol }
+          it         { subject.valid?.must_equal false }
+        end
+
+        describe 'and text has symbol' do
+          let(:text) { text_with_symbol }
+          it         { subject.valid?.must_equal true }
+        end
+      end
+
+      describe 'when symbol configuration is false' do
+        let(:args) { { symbol: false } }
+
+        describe 'and text does not have symbol' do
+          let(:text) { text_without_symbol }
+          it         { subject.valid?.must_equal true }
+        end
+
+        describe 'text has symbol' do
+          let(:text) { text_with_symbol }
+          it         { subject.valid?.must_equal true }
+        end
+      end
     end
 
-    it "should evaluate numerics" do
-      text_with    = 'he8llo'
-      text_without = 'hello'
+    describe 'validating numericality' do
+      let(:text_with_numeric)    { 'he8llo' }
+      let(:text_without_numeric) { 'hello' }
 
-      @config.numeric = true
-      password        = PasswordListGenerator::Password.new(text_with, @config)
-      password.valid?.must_equal true
-      password        = PasswordListGenerator::Password.new(text_without, @config)
-      password.valid?.must_equal false
+      describe 'when numeric configuration is true' do
+        let(:args) { { numeric: true } }
 
-      @config.numeric = false
-      password        = PasswordListGenerator::Password.new(text_with, @config)
-      password.valid?.must_equal true
-      password        = PasswordListGenerator::Password.new(text_without, @config)
-      password.valid?.must_equal true
+        describe 'and text does not have numeric' do
+          let(:text) { text_without_numeric }
+          it         { subject.valid?.must_equal false }
+        end
+      end
+
+      describe 'when numeric configuration is false' do
+        describe 'and text have numeric' do
+          let(:text) { text_with_numeric }
+          it         { subject.valid?.must_equal true }
+        end
+      end
     end
 
-    it "should evaluate lowercase" do
-      text_with    = 'hello'
-      text_without = 'HELLO'
+    describe 'evaluating lowercase' do
+      let(:text_with_lowercase)    { 'hello' }
+      let(:text_without_lowercase) { 'HELLO' }
 
-      password          = PasswordListGenerator::Password.new(text_with, @config)
-      password.valid?.must_equal true
-      password          = PasswordListGenerator::Password.new(text_without, @config)
-      password.valid?.must_equal false
+      describe 'when text has lowercase' do
+        let(:text) { text_with_lowercase }
+        it         { subject.valid?.must_equal true }
+      end
     end
 
-    it "should evaluate uppercase" do
-      text_with    = 'HEllo'
-      text_without = 'hello'
+    describe 'evaluating uppercase' do
+      let(:text_with_uppercase) { 'HEllo' }
+      let(:text_without_uppercase) { 'hello' }
 
-      @config.uppercase = true
-      password          = PasswordListGenerator::Password.new(text_with, @config)
-      password.valid?.must_equal true
-      password          = PasswordListGenerator::Password.new(text_without, @config)
-      password.valid?.must_equal false
+      describe 'when uppercase configuration is true' do
+        let(:args) { { uppercase: true } }
 
-      @config.uppercase = false
-      password          = PasswordListGenerator::Password.new(text_with, @config)
-      password.valid?.must_equal true
-      password          = PasswordListGenerator::Password.new(text_without, @config)
-      password.valid?.must_equal true
+        describe 'and text has uppercase' do
+          let(:text) { text_with_uppercase }
+          it         { subject.valid?.must_equal true }
+        end
+
+        describe 'and text does not have uppercase' do
+          let(:text) { text_without_uppercase }
+          it         { subject.valid?.must_equal false }
+        end
+      end
+
+      describe 'when uppercase configuration is false' do
+        let(:args) { { uppercase: false } }
+
+        describe 'and text has uppercase' do
+          let(:text) { text_with_uppercase }
+          it         { subject.valid?.must_equal true }
+        end
+
+        describe 'and text does not have uppercase' do
+          let(:text) { text_without_uppercase }
+          it         { subject.valid?.must_equal true }
+        end
+      end
     end
 
-    it "should evaluate minimum length" do
-      @config.min = 5
-      below_min   = 'helo'
-      equals_min  = "hello"
-      exceeds_min = 'hellooo'
+    describe 'evaluating minimum length' do
+      describe 'when min configuration is 5' do
+        let(:args) { { min: 5 } }
 
-      password = PasswordListGenerator::Password.new(below_min, @config)
-      password.valid?.must_equal false
+        describe 'when text is below min' do
+          let(:text) { 'helo' }
+          it         { subject.valid?.must_equal false }
+        end
 
-      password = PasswordListGenerator::Password.new(equals_min, @config)
-      password.valid?.must_equal true
+        describe 'when text is equal to min' do
+          let(:text) { "hello" }
+          it         { subject.valid?.must_equal true }
+        end
 
-      password = PasswordListGenerator::Password.new(exceeds_min, @config)
-      password.valid?.must_equal true
+        describe 'when text is greater than min' do
+          let(:text) { 'hellooo' }
+          it         { subject.valid?.must_equal true }
+        end
+      end
     end
 
-    it "should evaluate maximum length" do
-      @config.max = 5
-      below_max   = 'helo'
-      equals_max  = "hello"
-      exceeds_max = 'hellooo'
+    describe 'evaluating maximum length' do
+      describe 'when max configuration is 5' do
+        let(:args) { { max: 5 } }
 
-      password = PasswordListGenerator::Password.new(below_max , @config)
-      password.valid?.must_equal true
+        describe 'when text is below max' do
+          let(:text) { 'helo' }
+          it         { subject.valid?.must_equal true }
+        end
 
-      password = PasswordListGenerator::Password.new(equals_max , @config)
-      password.valid?.must_equal true
+        describe 'when text is equal to max' do
+          let(:text) { "hello" }
+          it         { subject.valid?.must_equal true }
+        end
 
-      password = PasswordListGenerator::Password.new(exceeds_max , @config)
-      password.valid?.must_equal false
+        describe 'when text is greater than max' do
+          let(:text) { 'hellooo' }
+          it         { subject.valid?.must_equal false }
+        end
+      end
     end
   end
-
 end

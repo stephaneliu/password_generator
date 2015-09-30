@@ -2,85 +2,111 @@ require_relative '../spec_helper'
 require 'ostruct'
 
 describe PasswordListGenerator::Generator do
-
 	describe 'initialization' do
-		it 'should build_characters_set' do
-			config    = OpenStruct.new
-			generator = PasswordListGenerator::Generator.new(config)
-			generator.characters_set.wont_equal nil
+    let(:config) { OpenStruct.new(args) }
+    let(:args)   { nil }
+
+    subject { PasswordListGenerator::Generator.new(config) }
+
+    describe 'build_character_set' do
+      it { subject.characters_set.wont_equal nil }
 		end
 
-		it 'character_set should have uppercase' do
-			config    = OpenStruct.new(uppercase: true)
-			generator = PasswordListGenerator::Generator.new(config)
-			generator.characters_set.find {|char| /[A-Z]/ === char}.nil?.must_equal false
+    describe 'when uppercase option' do
+      describe 'when uppercase option is true' do
+        let(:args) { { uppercase: true } }
+        it 'should include uppercase characters' do
+          subject.characters_set.any? { |char| /[A-Z]/ === char}.must_equal true
+        end
+      end
 
-			config    = OpenStruct.new(uppercase: false)
-			generator = PasswordListGenerator::Generator.new(config)
-			generator.characters_set.find {|char| /[A-Z]/ === char}.nil?.must_equal true
-		end
+      describe 'is false' do
+        let(:args) { { uppercase: false } }
+        it 'should not include uppercase characters' do
+          subject.characters_set.any? { |char| /[A-Z]/ === char }.must_equal false
+        end
+      end
+    end
 
-		it 'character_set should have numeric' do
-			config    = OpenStruct.new(numeric: true)
-			generator = PasswordListGenerator::Generator.new(config)
-			generator.characters_set.find {|char| /\d/ === char}.nil?.must_equal false
+    describe 'when numeric option' do 
+      describe 'is true' do 
+        let(:args) { { numeric: true } }
+        it 'should include numeric characters' do
+          subject.characters_set.any? { |char| /\d/ === char}.must_equal true
+        end
+      end
 
-			config    = OpenStruct.new(numeric: false)
-			generator = PasswordListGenerator::Generator.new(config)
-			generator.characters_set.find {|char| /\d/ === char}.nil?.must_equal true
-		end
-		
-		it 'character_set should have symbol when configured' do
-			config    = OpenStruct.new(symbol: true)
-			generator = PasswordListGenerator::Generator.new(config)
-			generator.characters_set.find {|char| /\W/ === char}.nil?.must_equal false
+      describe 'is false' do
+        let(:args) { { numeric: false } }
+        it 'should not include numeric characters' do
+          subject.characters_set.any? { |char| /\d/ === char}.must_equal false
+        end
+      end
+    end
 
-			config    = OpenStruct.new(symbol: false)
-			generator = PasswordListGenerator::Generator.new(config)
-			generator.characters_set.find {|char| /\W/ === char}.nil?.must_equal true
-		end
+    describe 'when symbol options' do
+      describe 'is true' do
+        let(:args) { { symbol: true } }
+        it 'should include symbols' do
+          subject.characters_set.any? { |char| /\W/ === char}.must_equal true
+        end
+      end
 
-		it 'should not include ambiguous characters' do
-			config    = OpenStruct.new(uppercase: true, numeric: true)
-			generator = PasswordListGenerator::Generator.new(config)
-			ambiguous = %w(i o 0 1 l 0 I)
+      describe 'is false' do
+        let(:args) { { symbol: false } }
+        it 'should not include symbols' do
+          subject.characters_set.any? { |char| /\W/ === char }.must_equal false
+        end
+      end
+    end
 
-			generator.characters_set.any? {|char| ambiguous.include? char}.must_equal false
+    describe 'ambiguous characters' do
+      let(:args)      { { uppercase: true, numeric: true } }
+      let(:ambiguous) { %w(i o 0 1 l 0 I) }
+
+      it 'should not be use' do
+        subject.characters_set.any? { |char| ambiguous.include? char}.must_equal false
+      end
 		end
 	end
 
 	describe '.generate' do
-		it "should generate the correct number of passwords" do
-			count     = 10
-			config    = OpenStruct.new(count: count, min: 5, max: 10)
-			generator = PasswordListGenerator::Generator.new(config)
+    let(:config) { OpenStruct.new(args) }
+    let(:args)   { nil }
 
-			generator.generate.size.must_equal count
-		end
+    subject { PasswordListGenerator::Generator.new(config).generate }
 
-		it "should be random" do
-			config           = OpenStruct.new(count: 100, min: 5, max: 10)
-			invalid_password = PasswordListGenerator::Password.new("a", config)
-			generator        = PasswordListGenerator::Generator.new(config)
-			passwords        = generator.generate
+    describe 'generating passwords' do
+      let(:args)  { { count: count, min: 5, max: 10 } }
+      let(:count) { 10 }
 
-			passwords.each do |password|
-				passwords.select {|pw| pw == password}.size.must_equal 1
-			end
-		end
+      it "should generate correct number of passwords" do
+        subject.size.must_equal count
+      end
+    end
 
-		it "should be deterministic" do
-			config           = OpenStruct.new(count: 2, min: 5, max: 10)
-			invalid_password = PasswordListGenerator::Password.new("a", config)
-			generator        = PasswordListGenerator::Generator.new(config)
+    describe 'randomness' do
+      let(:args) { { count: 100, min: 5, max: 10 } }
 
-			PasswordListGenerator::Password.stub :new, invalid_password do
-				begin
-					passwords = generator.generate
-				rescue Exception => e
-					passwords.must_equal nil
-				end
-			end
-		end
+      it "should be random" do
+        subject.must_equal subject.uniq
+      end
+    end
+
+    describe 'being deterministic' do
+      let(:args) { { count: 2, min: 5, max: 10 } }
+
+      it 'raise error when necessary' do
+        invalid_password = PasswordListGenerator::Password.new("a", config)
+
+        PasswordListGenerator::Password.stub :new, invalid_password do
+          begin
+            passwords = subject
+          rescue Exception => e
+            passwords.must_equal nil
+          end
+        end
+      end
+    end
 	end
 end
