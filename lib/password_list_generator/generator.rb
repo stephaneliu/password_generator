@@ -1,5 +1,9 @@
 module PasswordListGenerator
   class Generator
+    extend Forwardable
+
+    delegate [:count, :min, :max, :uppercase, :symbol, :numeric] => :config
+
     attr_accessor :characters_set, :config
 
     def initialize(config)
@@ -12,12 +16,12 @@ module PasswordListGenerator
       tries     = 0
 
 			catch :no_valid_passwords do
-				1.upto(config.count) do
+				1.upto(count) do
 					tries = 0
 					valid = false
 
 					until valid
-						random_size = (config.min..config.max).to_a.shuffle.first
+						random_size = (min..max).to_a.shuffle.first
 						password    = Password.new(random_string(random_size), config)
 
 						if password.valid?
@@ -48,9 +52,9 @@ module PasswordListGenerator
 
     def build_characters_set
       @characters_set = ('a'..'z').to_a
-      @characters_set += ('A'..'Z').to_a if config.uppercase
-      @characters_set += ('0'..'9').to_a if config.numeric
-      @characters_set += %w(! @ # $ % ^ & * _ +) if config.symbol
+      @characters_set += ('A'..'Z').to_a if uppercase
+      @characters_set += ('0'..'9').to_a if numeric
+      @characters_set += %w(! @ # $ % ^ & * _ +) if symbol
       remove_ambiguous_characters
     end
 

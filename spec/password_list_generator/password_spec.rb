@@ -10,11 +10,7 @@ describe PasswordListGenerator::Password do
 
 	describe '.new' do
     let(:text) { 'test' }
-
-		it 'should initialize password and config variables' do
-			subject.password.must_equal text
-			subject.config.must_equal config
-		end
+		it         { subject.password.must_equal text }
 	end
 
   describe '.to_s' do

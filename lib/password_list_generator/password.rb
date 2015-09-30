@@ -1,5 +1,9 @@
 module PasswordListGenerator
   class Password
+    extend Forwardable
+
+    delegate [:count, :min, :max, :uppercase, :symbol, :numeric] => :@config
+
     attr_accessor :password, :config
 
     def initialize(password, config)
@@ -8,7 +12,7 @@ module PasswordListGenerator
     end
 
     def valid?
-      has_special? and has_numeric? and has_lowercase? and has_uppercase? and correct_length?
+      special? and numeric? and lowercase? and uppercase? and length?
     end
 
     def to_s
@@ -17,24 +21,35 @@ module PasswordListGenerator
 
     private
    
-    def has_special?
-      config.symbol ? /\W/ === password : true
+    def special?
+      return true unless symbol
+      /\W/ === password
     end
 
-    def has_numeric?
-      config.numeric ? /\d/ === password : true
+    def numeric?
+      return true unless numeric
+      /\d/ === password
     end
 
-    def has_lowercase?
+    def lowercase?
       /[a-z]/ === password
     end
 
-    def has_uppercase?
-      config.uppercase ? /[A-Z]/ === password : true
+    def uppercase?
+      return true unless uppercase
+      /[A-Z]/ === password
     end
 
-    def correct_length?
-      password.size >= config.min and password.size <= config.max
+    def length?
+      greater_than_min && less_than_max
+    end
+
+    def greater_than_min
+      password.size >= min
+    end
+
+    def less_than_max
+      password.size <= max
     end
   end
 end
